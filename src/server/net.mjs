@@ -148,11 +148,14 @@ export class NodeTCPSocket {
         resolve();
       });
       this.socket.on("data", (data) => {
-        this.data_queue.put(data);
+        this.data_queue.put_now(data);
+        //stop reading once the queue is full, so a fast destination has to wait for a slow client
+        if (this.data_queue.size >= this.data_queue.max_size) this.pause();
       });
       this.socket.on("close", (error) => {
         if (error && !this.connected) reject();
-        else this.data_queue.close();
+        //whatever has already been read can still go to the client
+        else this.data_queue.finish();
         this.socket = null;
       });
       this.socket.on("error", (error) => {
@@ -171,22 +174,31 @@ export class NodeTCPSocket {
   }
 
   async recv() {
-    return await this.data_queue.get();
+    let data = await this.data_queue.get();
+    this.resume();
+    return data;
   }
 
   async send(data) {
+    //the destination has gone, while what it sent is still on its way to the client
+    if (!this.socket) return;
     await new Promise((resolve) => {
       this.socket.write(data, resolve);
     });
   }
 
   async close() {
+    //nobody is going to read what's left
+    this.data_queue.close();
     if (!this.socket) return;
     this.socket.end();
+    //a paused socket would never notice the other end closing
+    this.socket.resume();
     this.socket = null;
   }
 
   pause() {
+    if (!this.socket) return;
     if (this.data_queue.size >= this.data_queue.max_size) {
       this.socket.pause();
       this.paused = true;
@@ -194,7 +206,7 @@ export class NodeTCPSocket {
   }
   resume() {
     if (!this.socket) return;
-    if (this.paused) {
+    if (this.paused && this.data_queue.size < this.data_queue.max_size) {
       this.socket.resume();
       this.paused = false;
     }

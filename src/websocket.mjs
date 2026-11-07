@@ -76,6 +76,7 @@ export class AsyncQueue {
   constructor(max_size) {
     this.max_size = max_size;
     this.closed = false;
+    this.finished = false;
     this.queue = [];
     this.put_callbacks = [];
     this.get_callbacks = [];
@@ -104,7 +105,9 @@ export class AsyncQueue {
 
   get_now() {
     this.put_callbacks.shift()?.();
-    return this.queue.shift();
+    let item = this.queue.shift();
+    if (this.finished && this.size === 0) this.close();
+    return item;
   }
 
   async get() {
@@ -120,6 +123,12 @@ export class AsyncQueue {
       this.get_callbacks.push(resolve);
     });
     return this.get_now();
+  }
+
+  //no more items are coming, but the ones already here can still be read
+  finish() {
+    this.finished = true;
+    if (this.size === 0) this.close();
   }
 
   close() {

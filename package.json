@@ -41,7 +41,8 @@
     "build": "webpack",
     "build:prod": "webpack --mode=production",
     "dev": "webpack --watch",
-    "server_cli": "node ./src/bin/server_cli.mjs"
+    "server_cli": "node ./src/bin/server_cli.mjs",
+    "test": "node --test"
   },
   "bin": {
     "wisp-js-server": "src/bin/server_cli.mjs"
