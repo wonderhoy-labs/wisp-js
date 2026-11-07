@@ -1,17 +1,17 @@
 {
   "name": "@mercuryworkshop/wisp-js",
-  "version": "0.5.3",
+  "version": "0.5.3-wonderhoy.1",
   "description": "A client and server for the Wisp protocol, written in Javascript",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MercuryWorkshop/wisp-js.git"
+    "url": "git+https://github.com/wonderhoy-labs/wisp-js.git"
   },
   "author": "MercuryWorkshop",
   "license": "LGPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/MercuryWorkshop/wisp-js/issues"
+    "url": "https://github.com/wonderhoy-labs/wisp-js/issues"
   },
-  "homepage": "https://github.com/MercuryWorkshop/wisp-js#readme",
+  "homepage": "https://github.com/wonderhoy-labs/wisp-js#readme",
   "main": "./src/index.mjs",
   "exports": {
     ".": {

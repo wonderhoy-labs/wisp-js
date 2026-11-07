@@ -1,5 +1,16 @@
 # JavaScript Wisp Implementation
 
+> **This is a fork of [MercuryWorkshop/wisp-js](https://github.com/MercuryWorkshop/wisp-js), used by
+> [Shira](https://github.com/wonderhoy-labs/shira).** The `fixes` branch was modified from upstream on November 7, 2026, and the
+> `master` branch has no changes of its own. It adds two fixes, listed in the [changelog](CHANGELOG.md):
+>
+> - The server no longer loses data when a destination closes before a slow client has caught up, and no longer reads a
+>   destination into memory without limit.
+> - The client's password extension message follows the final Wisp protocol.
+>
+> It's still under the GNU LGPL v3 or later. [`LICENSE`](LICENSE) has that license, and [`COPYING`](COPYING) has the GNU GPL v3
+> that it builds on.
+
 This is an implementation of a [Wisp](https://github.com/mercuryWorkshop/wisp-protocol) client and server, written in Javascript for use in NodeJS and in the browser.
 
 ## Features:
