@@ -76,19 +76,18 @@ export class PasswordAuthExtension extends BaseExtension {
     }
     static parse(buffer) {
       let username_len = buffer.view.getUint8(0);
-      let password_len = buffer.view.getUint16(1, true);
-      let password_index = username_len + 3;
       return new PasswordAuthExtension.Client({
-        username: buffer.slice(3, username_len).get_string(),
-        password: buffer.slice(password_index, password_len).get_string()
+        username: buffer.slice(1, username_len).get_string(),
+        password: buffer.slice(1 + username_len).get_string()
       });
     }
     serialize() {
       let username_buffer = new WispBuffer(this.username);
       let password_buffer = new WispBuffer(this.password);
-      let buffer = new WispBuffer(3);
+      if (username_buffer.size > 255)
+        throw new RangeError("wisp usernames can be at most 255 bytes long");
+      let buffer = new WispBuffer(1);
       buffer.view.setUint8(0, username_buffer.size);
-      buffer.view.setUint16(1, password_buffer.size, true);
       return buffer.concat(username_buffer).concat(password_buffer);
     }
   }

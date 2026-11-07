@@ -1,3 +1,8 @@
+## Unreleased:
+- Fix the server losing data when a destination closes before a slow client has caught up
+- Stop the server from reading a destination into memory without limit when a client is slow
+- Make the client's password extension message follow the final protocol
+
 ## v0.5.3 (11/6/26):
 - Fix packet parsing, flow control, and handshake bugs on the client and server
 - Fix DNS, IP filtering, hostname, and proxy URL handling on the server
